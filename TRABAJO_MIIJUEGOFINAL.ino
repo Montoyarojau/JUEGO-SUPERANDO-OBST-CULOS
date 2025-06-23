@@ -22,8 +22,8 @@
 #define TERRAIN_LOWER_BLOCK 1
 #define TERRAIN_UPPER_BLOCK 2
 
-#define HERO_POSITION_OFF 0          // Hero is invisible
-#define HERO_POSITION_RUN_LOWER_1 1  // Hero is running on lower row (pose 1)
+#define HERO_POSITION_OFF 0          // Heore es invisible
+#define HERO_POSITION_RUN_LOWER_1 1  // El héroe está corriendo en la fila superior (pose 1)
 #define HERO_POSITION_RUN_LOWER_2 2  //                              (pose 2)
 
 #define HERO_POSITION_JUMP_1 3       // Starting a jump
