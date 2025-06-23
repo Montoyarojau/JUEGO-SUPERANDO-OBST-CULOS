@@ -10,7 +10,7 @@
 #define SPRITE_JUMP 3
 #define SPRITE_JUMP_UPPER '.'         // Use the '.' character for the head
 #define SPRITE_JUMP_LOWER 4
-#define SPRITE_TERRAIN_EMPTY ' '      // User the ' ' character
+#define SPRITE_TERRAIN_EMPTY ' '      // Use the ' ' character
 #define SPRITE_TERRAIN_SOLID 5
 #define SPRITE_TERRAIN_SOLID_RIGHT 6
 #define SPRITE_TERRAIN_SOLID_LEFT 7
