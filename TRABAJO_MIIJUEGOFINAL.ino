@@ -15,7 +15,7 @@
 #define SPRITE_TERRAIN_SOLID_RIGHT 6
 #define SPRITE_TERRAIN_SOLID_LEFT 7
 
-#define HERO_HORIZONTAL_POSITION 1    // Horizontal position of hero on screen
+#define HERO_HORIZONTAL_POSITION 1    // Posición horizontal del héroe en la pantalla
 
 #define TERRAIN_WIDTH 16
 #define TERRAIN_EMPTY 0
