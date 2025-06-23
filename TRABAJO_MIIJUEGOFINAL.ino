@@ -36,7 +36,7 @@
 #define HERO_POSITION_JUMP_8 10      // About to land
 
 #define HERO_POSITION_RUN_UPPER_1 11 // Hero is running on upper row (pose 1)
-#define HERO_POSITION_RUN_UPPER_2 12 //                              (pose 2)
+#define HERO_POSITION_RUN_UPPER_2 12 // Hero is running on upper row (pose 2)
 
 LiquidCrystal lcd(11, 9, 6, 5, 4, 3);
 static char terrainUpper[TERRAIN_WIDTH + 1];
