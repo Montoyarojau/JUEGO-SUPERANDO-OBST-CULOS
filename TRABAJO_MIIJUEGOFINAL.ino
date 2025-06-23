@@ -109,3 +109,81 @@ void initializeGraphics(){
     B11000,
     B11000,
   };
+int i;
+  // Skip using character 0, this allows lcd.print() to be used to
+  // quickly draw multiple characters
+  for (i = 0; i < 7; ++i) {
+    lcd.createChar(i + 1, &graphics[i * 8]);
+  }
+  for (i = 0; i < TERRAIN_WIDTH; ++i) {
+    terrainUpper[i] = SPRITE_TERRAIN_EMPTY;
+    terrainLower[i] = SPRITE_TERRAIN_EMPTY;
+  }
+}
+
+// Slide the terrain to the left in half-character increments
+//
+void advanceTerrain(char* terrain, byte newTerrain){
+  for (int i = 0; i < TERRAIN_WIDTH; ++i) {
+    char current = terrain[i];
+    char next = (i == TERRAIN_WIDTH-1) ? newTerrain : terrain[i+1];
+    switch (current){
+      case SPRITE_TERRAIN_EMPTY:
+        terrain[i] = (next == SPRITE_TERRAIN_SOLID) ? SPRITE_TERRAIN_SOLID_RIGHT : SPRITE_TERRAIN_EMPTY;
+        break;
+      case SPRITE_TERRAIN_SOLID:
+        terrain[i] = (next == SPRITE_TERRAIN_EMPTY) ? SPRITE_TERRAIN_SOLID_LEFT : SPRITE_TERRAIN_SOLID;
+        break;
+      case SPRITE_TERRAIN_SOLID_RIGHT:
+        terrain[i] = SPRITE_TERRAIN_SOLID;
+        break;
+      case SPRITE_TERRAIN_SOLID_LEFT:
+        terrain[i] = SPRITE_TERRAIN_EMPTY;
+        break;
+    }
+  }
+}
+
+bool drawHero(byte position, char* terrainUpper, char* terrainLower, unsigned int score) {
+  bool collide = false;
+  char upperSave = terrainUpper[HERO_HORIZONTAL_POSITION];
+  char lowerSave = terrainLower[HERO_HORIZONTAL_POSITION];
+  byte upper, lower;
+  switch (position) {
+    case HERO_POSITION_OFF:
+      upper = lower = SPRITE_TERRAIN_EMPTY;
+      break;
+    case HERO_POSITION_RUN_LOWER_1:
+      upper = SPRITE_TERRAIN_EMPTY;
+      lower = SPRITE_RUN1;
+      break;
+    case HERO_POSITION_RUN_LOWER_2:
+      upper = SPRITE_TERRAIN_EMPTY;
+      lower = SPRITE_RUN2;
+      break;
+    case HERO_POSITION_JUMP_1:
+    case HERO_POSITION_JUMP_8:
+      upper = SPRITE_TERRAIN_EMPTY;
+      lower = SPRITE_JUMP;
+      break;
+    case HERO_POSITION_JUMP_2:
+    case HERO_POSITION_JUMP_7:
+      upper = SPRITE_JUMP_UPPER;
+      lower = SPRITE_JUMP_LOWER;
+      break;
+    case HERO_POSITION_JUMP_3:
+    case HERO_POSITION_JUMP_4:
+    case HERO_POSITION_JUMP_5:
+    case HERO_POSITION_JUMP_6:
+      upper = SPRITE_JUMP;
+      lower = SPRITE_TERRAIN_EMPTY;
+      break;
+    case HERO_POSITION_RUN_UPPER_1:
+      upper = SPRITE_RUN1;
+      lower = SPRITE_TERRAIN_EMPTY;
+      break;
+    case HERO_POSITION_RUN_UPPER_2:
+      upper = SPRITE_RUN2;
+      lower = SPRITE_TERRAIN_EMPTY;
+      break;
+  }
