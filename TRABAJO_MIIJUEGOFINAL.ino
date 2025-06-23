@@ -44,7 +44,7 @@ static bool buttonPushed = false;
 
 void initializeGraphics(){
   static byte graphics[] = {
-    // Run position 1
+    // Correr posición 1
     B01100,
     B01100,
     B00000,
@@ -53,7 +53,7 @@ void initializeGraphics(){
     B01100,
     B11010,
     B10011,
-    // Run position 2
+    // Correr posición 2
     B01100,
     B01100,
     B00000,
@@ -62,7 +62,7 @@ void initializeGraphics(){
     B01100,
     B01100,
     B01110,
-    // Jump
+    // Saltar
     B01100,
     B01100,
     B00000,
@@ -71,7 +71,7 @@ void initializeGraphics(){
     B11111,
     B10000,
     B00000,
-    // Jump lower
+    // Saltar 
     B11110,
     B01101,
     B11111,
@@ -80,7 +80,7 @@ void initializeGraphics(){
     B00000,
     B00000,
     B00000,
-    // Ground
+    // Tierra
     B11111,
     B11111,
     B11111,
@@ -89,7 +89,7 @@ void initializeGraphics(){
     B11111,
     B11111,
     B11111,
-    // Ground right
+    // Derecho de tierra
     B00011,
     B00011,
     B00011,
@@ -98,7 +98,7 @@ void initializeGraphics(){
     B00011,
     B00011,
     B00011,
-    // Ground left
+    // Izquierda de tierra
     B11000,
     B11000,
     B11000,
@@ -109,8 +109,8 @@ void initializeGraphics(){
     B11000,
   };
 int i;
-  // Skip using character 0, this allows lcd.print() to be used to
-  // quickly draw multiple characters
+ // Omitir el uso del carácter 0, lo que permite usar lcd.print() para
+ // dibujar rápidamente varios caracteres
   for (i = 0; i < 7; ++i) {
     lcd.createChar(i + 1, &graphics[i * 8]);
   }
@@ -120,7 +120,7 @@ int i;
   }
 }
 
-// Slide the terrain to the left in half-character increments
+// Desliza el terreno hacia la izquierda en incrementos de medio carácter
 //
 void advanceTerrain(char* terrain, byte newTerrain){
   for (int i = 0; i < TERRAIN_WIDTH; ++i) {
@@ -197,7 +197,7 @@ if (upper != ' ') {
   
   byte digits = (score > 9999) ? 5 : (score > 999) ? 4 : (score > 99) ? 3 : (score > 9) ? 2 : 1;
   
-  // Draw the scene
+  //dibuja la escena
   terrainUpper[TERRAIN_WIDTH] = '\0';
   terrainLower[TERRAIN_WIDTH] = '\0';
   char temp = terrainUpper[16-digits];
@@ -216,7 +216,7 @@ if (upper != ' ') {
   return collide;
 }
 
-// Handle the button push as an interrupt
+// Manejar la pulsación del botón como una interrupción
 void buttonPush() {
   buttonPushed = true;
 }
@@ -230,8 +230,7 @@ void setup(){
   digitalWrite(PIN_BUTTON, HIGH);
   pinMode(PIN_AUTOPLAY, OUTPUT);
   digitalWrite(PIN_AUTOPLAY, HIGH);
-  
-  // Digital pin 2 maps to interrupt 0
+// El pin digital 2 se asigna a la interrupción 0
   attachInterrupt(0/PIN_BUTTON/, buttonPush, FALLING);
   
   initializeGraphics();
@@ -264,11 +263,11 @@ if (!playing) {
     return;
   }
 
-  // Shift the terrain to the left
+  // Desplaza el terreno hacia la izquierda
   advanceTerrain(terrainLower, newTerrainType == TERRAIN_LOWER_BLOCK ? SPRITE_TERRAIN_SOLID : SPRITE_TERRAIN_EMPTY);
   advanceTerrain(terrainUpper, newTerrainType == TERRAIN_UPPER_BLOCK ? SPRITE_TERRAIN_SOLID : SPRITE_TERRAIN_EMPTY);
   
-  // Make new terrain to enter on the right
+  //Crear nuevo terreno para entrar por la derecha
   if (--newTerrainDuration == 0) {
     if (newTerrainType == TERRAIN_EMPTY) {
       newTerrainType = (random(3) == 0) ? TERRAIN_UPPER_BLOCK : TERRAIN_LOWER_BLOCK;
@@ -285,7 +284,7 @@ if (!playing) {
   }  
 
   if (drawHero(heroPos, terrainUpper, terrainLower, distance >> 3)) {
-    playing = false; // The hero collided with something. Too bad.
+    playing = false; // El héroe chocó con algo. Qué lástima.
   } else {
     if (heroPos == HERO_POSITION_RUN_LOWER_2 || heroPos == HERO_POSITION_JUMP_8) {
       heroPos = HERO_POSITION_RUN_LOWER_1;
