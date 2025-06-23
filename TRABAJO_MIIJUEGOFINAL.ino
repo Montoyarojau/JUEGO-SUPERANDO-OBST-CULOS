@@ -187,3 +187,63 @@ bool drawHero(byte position, char* terrainUpper, char* terrainLower, unsigned in
       lower = SPRITE_TERRAIN_EMPTY;
       break;
   }
+if (upper != ' ') {
+    terrainUpper[HERO_HORIZONTAL_POSITION] = upper;
+    collide = (upperSave == SPRITE_TERRAIN_EMPTY) ? false : true;
+  }
+  if (lower != ' ') {
+    terrainLower[HERO_HORIZONTAL_POSITION] = lower;
+    collide |= (lowerSave == SPRITE_TERRAIN_EMPTY) ? false : true;
+  }
+  
+  byte digits = (score > 9999) ? 5 : (score > 999) ? 4 : (score > 99) ? 3 : (score > 9) ? 2 : 1;
+  
+  // Draw the scene
+  terrainUpper[TERRAIN_WIDTH] = '\0';
+  terrainLower[TERRAIN_WIDTH] = '\0';
+  char temp = terrainUpper[16-digits];
+  terrainUpper[16-digits] = '\0';
+  lcd.setCursor(0,0);
+  lcd.print(terrainUpper);
+  terrainUpper[16-digits] = temp;  
+  lcd.setCursor(0,1);
+  lcd.print(terrainLower);
+  
+  lcd.setCursor(16 - digits,0);
+  lcd.print(score);
+
+  terrainUpper[HERO_HORIZONTAL_POSITION] = upperSave;
+  terrainLower[HERO_HORIZONTAL_POSITION] = lowerSave;
+  return collide;
+}
+
+// Handle the button push as an interrupt
+void buttonPush() {
+  buttonPushed = true;
+}
+
+void setup(){
+  pinMode(PIN_READWRITE, OUTPUT);
+  digitalWrite(PIN_READWRITE, LOW);
+  pinMode(PIN_CONTRAST, OUTPUT);
+  digitalWrite(PIN_CONTRAST, LOW);
+  pinMode(PIN_BUTTON, INPUT);
+  digitalWrite(PIN_BUTTON, HIGH);
+  pinMode(PIN_AUTOPLAY, OUTPUT);
+  digitalWrite(PIN_AUTOPLAY, HIGH);
+  
+  // Digital pin 2 maps to interrupt 0
+  attachInterrupt(0/PIN_BUTTON/, buttonPush, FALLING);
+  
+  initializeGraphics();
+  
+  lcd.begin(16, 2);
+}
+
+void loop(){
+  static byte heroPos = HERO_POSITION_RUN_LOWER_1;
+  static byte newTerrainType = TERRAIN_EMPTY;
+  static byte newTerrainDuration = 1;
+  static bool playing = false;
+  static bool blink = false;
+  static unsigned int distance = 0;
