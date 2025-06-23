@@ -1,40 +1,4 @@
 #include <LiquidCrystal.h>
-//Minijuego 1 con pantalla LCD
-#include <EEPROM.h>More actions
-#include <LiquidCrystal.h>//libreria de la pantalla
-#include "melodia.h"
-
-LiquidCrystal lcd(10, 8, 7, 6, 5, 4); //Configura los pines de salida para la lcd
-
-//Definimos los nuebos caracteres
-byte caracateres[8][8] = {{ B01110, B00100, B11111, B01110, B01010, B01010, B11111, B01010 },
-                  { B01110, B00100, B11111, B01110, B11011, B00000, B11111, B11111 },
-                  { B01110, B10101, B11111, B01110, B01010, B01010, B11111, B01010 },
-                  { B00000, B00000, B00000, B00000, B00000, B00000, B00000, B00000 },
-                  { B00000, B00000, B00000, B11111, B11111, B11111, B11111, B11111 },
-                  { B00000, B11111, B11111, B11111, B11111, B11111, B11111, B11111 },
-                  { B01110, B11111, B11111, B11111, B11111, B11111, B11111, B11111 }};
-
-//definicion pin buzzer
-const int buzz = 9;
-
-//definicion boton
-const int btn = 3;
-
-// definicion de las variables del juego
-int x=15;
-int y=1;
-int obstaculos=0;
-int vel=100;
-int puntaje=0;
-int GameOver=3;
-int moment = 0;
-int maximoPuntaje = 0;
-
-//definicion variables musica
-int notaActual = 0;
-unsigned long tiempoNotaAnterior = 0;
-bool notaActiva = false;
 
 #define PIN_BUTTON 2
 #define PIN_AUTOPLAY 1
@@ -73,32 +37,11 @@ bool notaActiva = false;
 
 #define HERO_POSITION_RUN_UPPER_1 11 // Hero is running on upper row (pose 1)
 #define HERO_POSITION_RUN_UPPER_2 12 //                              (pose 2)
-void setup(){
-  //lectura del maximo puntaje historico
-  EEPROM.write(maximoPuntaje,0);
-  //inicializamos la interrupción
-  attachInterrupt(digitalPinToInterrupt(btn), incrementarContador, RISING);
-  //inicializamos el lcd
-  lcd.begin(16, 2);
-  //Creamos los nuevos caracteres
-  for(int i=0; i<8; i++){
-    lcd.createChar(i,caracateres[i]);
-  }
-  //inicializamos el buzzer
-  pinMode(buzz, OUTPUT);
-  noTone(buzz);
-}
 
 LiquidCrystal lcd(11, 9, 6, 5, 4, 3);
 static char terrainUpper[TERRAIN_WIDTH + 1];
 static char terrainLower[TERRAIN_WIDTH + 1];
 static bool buttonPushed = false;
-void loop(){
-  //reproducimos musica del juego
-  reproducirMusica();
-  //reproducimos el juego en el lcd
-  actualizarJuego();
-}
 
 void initializeGraphics(){
   static byte graphics[] = {
@@ -175,13 +118,6 @@ void initializeGraphics(){
   for (i = 0; i < TERRAIN_WIDTH; ++i) {
     terrainUpper[i] = SPRITE_TERRAIN_EMPTY;
     terrainLower[i] = SPRITE_TERRAIN_EMPTY;
-void actualizarJuego(){
-  if (moment == 0){
-    inicioJuego();
-  } else if (moment == 1){
-    juego();
-  } else {
-    finJuego();
   }
 }
 
@@ -204,22 +140,7 @@ void advanceTerrain(char* terrain, byte newTerrain){
       case SPRITE_TERRAIN_SOLID_LEFT:
         terrain[i] = SPRITE_TERRAIN_EMPTY;
         break;
-void reproducirMusica(){
-  unsigned long ahora = millis();
-  if (notaActual < numNotas) {
-    if (notaActiva == false) {
-      tone(buzz, melodia[notaActual][0]);
-      tiempoNotaAnterior = ahora;
-      notaActiva = true;
     }
-
-    if (ahora - tiempoNotaAnterior >= melodia[notaActual][1]) {
-      noTone(buzz);
-      notaActual++;
-      notaActiva = false;
-    }
-  } else {
-    notaActual = 0;
   }
 }
 
@@ -290,7 +211,6 @@ bool drawHero(byte position, char* terrainUpper, char* terrainLower, unsigned in
   
   lcd.setCursor(16 - digits,0);
   lcd.print(score);
-void inicioJuego(){
 
   terrainUpper[HERO_HORIZONTAL_POSITION] = upperSave;
   terrainLower[HERO_HORIZONTAL_POSITION] = lowerSave;
@@ -301,7 +221,6 @@ void inicioJuego(){
 void buttonPush() {
   buttonPushed = true;
 }
-void juego(){
 
 void setup(){
   pinMode(PIN_READWRITE, OUTPUT);
@@ -346,7 +265,6 @@ void loop(){
     }
     return;
   }
-void finJuego(){
 
   // Shift the terrain to the left
   advanceTerrain(terrainLower, newTerrainType == TERRAIN_LOWER_BLOCK ? SPRITE_TERRAIN_SOLID : SPRITE_TERRAIN_EMPTY);
@@ -367,7 +285,6 @@ void finJuego(){
     if (heroPos <= HERO_POSITION_RUN_LOWER_2) heroPos = HERO_POSITION_JUMP_1;
     buttonPushed = false;
   }  
-}
 
   if (drawHero(heroPos, terrainUpper, terrainLower, distance >> 3)) {
     playing = false; // The hero collided with something. Too bad.
@@ -388,11 +305,4 @@ void finJuego(){
     digitalWrite(PIN_AUTOPLAY, terrainLower[HERO_HORIZONTAL_POSITION + 2] == SPRITE_TERRAIN_EMPTY ? HIGH : LOW);
   }
   delay(100);
-void incrementarContador() {
-  moment++;
-
-}
-
-void incrementarContador() {
-  moment++;
 }
